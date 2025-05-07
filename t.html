@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-OP_TYPE_AUGMENT">
+    <title>祝吴茂春生日快乐！</title>
+    <style>
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars from overflowing hearts */
+            position: relative; /* For positioning hearts */
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px 60px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            animation: fadeInContainer 2s ease-in-out;
+        }
+
+        @keyframes fadeInContainer {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h1 {
+            color: #e91e63; /* Deep pink */
+            font-size: 3em;
+            margin-bottom: 10px;
+            animation: popIn 1s ease-out 0.5s backwards;
+        }
+
+        h2 {
+            color: #ff5722; /* Orange red */
+            font-size: 2.5em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            animation: popIn 1s ease-out 1s backwards;
+        }
+
+        p {
+            color: #333;
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            animation: fadeInText 2s ease-in-out 1.5s backwards;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            70% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff4081; /* Pink */
+            transform: rotate(-45deg);
+            animation: fall 10s infinite linear;
+            opacity: 0.7;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff4081;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: 10px;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(-45deg) scale(1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(110vh) rotate(-45deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* For a more personal touch, you can add this class to a specific message */
+        .special-message {
+            font-style: italic;
+            color: #d81b60; /* Darker pink */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>生日快乐！</h1>
+        <h2>亲爱的 吴茂春！</h2>
+        <p>
+            愿所有的快乐、所有的幸福、所有的温馨、所有的好运都围绕在你身边。
+            <br>
+            生日快乐！愿你每天都开开心心，笑容灿烂！
+        </p>
+        <p class="special-message">
+            （老婆~）
+        </p>
+    </div>
+
+    <script>
+        // Create falling hearts
+        function createHearts() {
+            const heartsContainer = document.body;
+            const numHearts = 30; // Number of hearts
+
+            for (let i = 0; i < numHearts; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
+                heart.style.animationDelay = Math.random() * 10 + 's'; // Random start delay
+                heart.style.transform = `translateY(-10vh) rotate(-45deg) scale(${Math.random() * 0.5 + 0.5})`; // Random initial scale
+                heartsContainer.appendChild(heart);
+            }
+        }
+        createHearts();
+    </script>
+</body>
+</html>
