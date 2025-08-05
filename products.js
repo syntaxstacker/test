@@ -32,7 +32,7 @@ const products = [
     id: 4,
     model: "ESS.RL1.1236", // 型号
     description: "单相光伏储能系统", // 名字
-    ratedCapacity: "36.86kWh", // 额定容量
+    ratedCapacity: "额定容量：36.86kWh", // 额定容量
     ratedPower: "额定功率：12kW", // 额定功率
     maximumPhotovoltaicInput: "最大光伏输入：14kwp", // 最大光伏输入
     image:
@@ -42,7 +42,7 @@ const products = [
     id: 5,
     model: "ESS.RL1.1836",
     description: "单相光伏储能系统",
-    ratedCapacity: "36.86kWh",
+    ratedCapacity: "额定容量：36.86kWh",
     ratedPower: "额定功率：18kW",
     maximumPhotovoltaicInput: "最大光伏输入：21kwp",
     image:
@@ -52,7 +52,7 @@ const products = [
     id: 6,
     model: "ESS.RL1.1836",
     description: "三相光伏储能系统",
-    ratedCapacity: "36.86kWh",
+    ratedCapacity: "额定容量：36.86kWh",
     ratedPower: "额定功率：18kW",
     maximumPhotovoltaicInput: "最大光伏输入：21kwp",
     image:

@@ -66,14 +66,26 @@ function showProductRecommendations(capacity) {
     // Clear previous product list
     productListDiv.innerHTML = '';
     
+    // Convert capacity from Wh to kWh for comparison with product data
+    const capacityKwh = capacity / 1000;
+    
     // Find recommended products (smallest product with capacity >= required capacity, and a slightly larger one)
-    const recommendedProducts = products.filter(product => product.capacity >= capacity)
-                                        .sort((a, b) => a.capacity - b.capacity)
-                                        .slice(0, 2);
+    const recommendedProducts = products.filter(product => {
+        const productCapacity = parseFloat(product.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
+        return productCapacity >= capacityKwh;
+    }).sort((a, b) => {
+        const capacityA = parseFloat(a.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
+        const capacityB = parseFloat(b.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
+        return capacityA - capacityB;
+    }).slice(0, 2);
     
     // If no suitable products found, recommend the product with maximum capacity
     if (recommendedProducts.length === 0) {
-        const maxProduct = [...products].sort((a, b) => b.capacity - a.capacity)[0];
+        const maxProduct = [...products].sort((a, b) => {
+            const capacityA = parseFloat(a.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
+            const capacityB = parseFloat(b.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
+            return capacityB - capacityA;
+        })[0];
         recommendedProducts.push(maxProduct);
     }
     
@@ -82,13 +94,15 @@ function showProductRecommendations(capacity) {
         const productCard = document.createElement('div');
         productCard.className = 'border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow';
         productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+            <img src="${product.image}" alt="${product.model}" class="w-full h-92 object-cover">
             <div class="p-4">
-                <h3 class="font-semibold text-lg text-gray-800">${product.name}</h3>
+                <h3 class="font-semibold text-lg text-gray-800">${product.model}</h3>
                 <p class="text-gray-600 mt-2">${product.description}</p>
+                <p class="text-gray-700 mt-1">${product.ratedCapacity}</p>
+                <p class="text-gray-700">${product.ratedPower}</p>
                 <div class="mt-3 flex justify-between items-center">
-                    <span class="text-primary font-medium">${product.capacity}Wh</span>
-                    <button class="bg-primary hover:bg-[#6a7a40] text-white px-3 py-1 rounded text-sm transition-colors">Learn More</button>
+                    <p class="text-gray-700">${product.maximumPhotovoltaicInput}</p>
+                    <button class="bg-primary hover:bg-[#6a7a40] text-white px-3 py-1 rounded text-sm transition-colors">查看详情</button>
                 </div>
             </div>
         `;
