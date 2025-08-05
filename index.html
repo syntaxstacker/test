@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电池容量计算器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">电池容量计算器</h1>
+        
+        <div class="space-y-4">
+            <div>
+                <label for="power" class="block text-sm font-medium text-gray-700 mb-1">负载功率 (瓦特)</label>
+                <input type="number" id="power" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入负载功率">
+            </div>
+            
+            <div>
+                <label for="duration" class="block text-sm font-medium text-gray-700 mb-1">工作时长 (小时)</label>
+                <input type="number" id="duration" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入工作时长">
+            </div>
+            
+            <div>
+                <label for="efficiency" class="block text-sm font-medium text-gray-700 mb-1">系统效率 (%)</label>
+                <input type="number" id="efficiency" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="85" placeholder="请输入系统效率">
+            </div>
+            
+            <button id="calculate" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300">计算电池容量</button>
+            
+            <div id="result" class="hidden mt-4 p-4 bg-blue-50 rounded-md">
+                <h2 class="text-lg font-semibold text-gray-800">计算结果</h2>
+                <p class="text-gray-700 mt-2">所需电池容量: <span id="battery-capacity" class="font-medium text-blue-600">0</span> 瓦时 (Wh)</p>
+                <p class="text-sm text-gray-600 mt-1">计算公式: 电池容量 = (负载功率 × 工作时长) / 系统效率</p>
+            </div>
+            
+            <div id="error" class="hidden mt-4 p-4 bg-red-50 rounded-md">
+                <p class="text-red-700"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
