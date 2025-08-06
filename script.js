@@ -16,37 +16,43 @@ function calculateBatteryCapacity() {
     recommendationsDiv.classList.add('hidden');
     
     // Get input values
+    if (isNaN(powerInput.value)) {
+        showError('请输入有效的数字');
+        return;
+    }
     const power = parseFloat(powerInput.value);
+    
+    if (isNaN(durationInput.value)) {
+        showError('请输入有效的数字');
+        return;
+    }
     const duration = parseFloat(durationInput.value);
     
-    // Validate inputs
-    if (powerInput.value === '') {
-        showError('Please enter power load');
-        return;
-    }
-    
-    if (durationInput.value === '') {
-        showError('Please enter duration');
-        return;
-    }
-    
-    if (isNaN(power)) {
-        showError('Please enter a valid number for power load');
-        return;
-    }
-    
-    if (isNaN(duration)) {
-        showError('Please enter a valid number for duration');
-        return;
-    }
-    
     if (power <= 0) {
-        showError('Power load must be greater than 0');
+        powerInput.value = '0';
+        showError('负载功率必须大于0');
+        return;
+    }
+    
+    if (powerInput.value < 0) {
+        powerInput.value = '0';
+        showError('负载功率必须大于0');
         return;
     }
     
     if (duration <= 0) {
-        showError('Duration must be greater than 0');
+        durationInput.value = '0';
+        if (power > 0) {
+            errorDiv.classList.add('hidden');
+        } else {
+            showError('请填写有效的数值');
+        }
+        return;
+    }
+    
+    if (durationInput.value < 0) {
+        durationInput.value = '0';
+        showError('请填写有效的数值');
         return;
     }
     
@@ -100,7 +106,7 @@ function showProductRecommendations(capacity) {
                 <p class="text-gray-600 mt-2">${product.description}</p>
                 <p class="text-gray-700 mt-1">${product.ratedCapacity}</p>
                 <p class="text-gray-700">${product.ratedPower}</p>
-                <div class="mt-3 flex justify-between items-center">
+                <div class="flex justify-between items-center">
                     <p class="text-gray-700">${product.maximumPhotovoltaicInput}</p>
                     <button class="bg-primary hover:bg-[#6a7a40] text-white px-3 py-1 rounded text-sm transition-colors">查看详情</button>
                 </div>
@@ -115,7 +121,11 @@ function showProductRecommendations(capacity) {
 
 // Show error message function
 function showError(message) {
-    errorDiv.querySelector('p').textContent = message;
+    const messages = errorDiv.querySelectorAll('p');
+    messages.forEach((el, i) => {
+        if (i === 0) el.textContent = message;
+        else el.textContent = '';
+    });
     errorDiv.classList.remove('hidden');
 }
 
