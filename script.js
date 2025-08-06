@@ -110,7 +110,7 @@ function showProductRecommendations(requiredKwh) {
 
     picks.forEach(({p: chosen}) => {
         const productCard = document.createElement('div');
-        productCard.className = 'border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow';
+        productCard.className = 'flex-none border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow';
         productCard.innerHTML = `
             <img src="${chosen.image}" alt="${chosen.model}" class="w-full h-92 object-cover">
             <div class="p-4">
@@ -120,7 +120,7 @@ function showProductRecommendations(requiredKwh) {
                 <p class="text-gray-700">${chosen.ratedPower}</p>
                 <div class="flex justify-between items-center">
                     <p class="text-gray-700">${chosen.maximumPhotovoltaicInput}</p>
-                    <button class="bg-primary hover:bg-[#6a7a40] text-white px-3 py-1 rounded text-sm transition-colors">查看详情</button>
+                    <button class="bg-primary hover:bg-[#6a7a40] text-white px-3 py-1 rounded text-sm transition-colors">查看</button>
                 </div>
             </div>
         `;

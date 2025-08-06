@@ -15,7 +15,7 @@ const products = [
     description: "单相光伏储能系统",
     ratedCapacity: "额定容量：24.56kWh",
     ratedPower: "额定功率：6kW",
-    maximumPhotovoltaicInput: "最大光伏输入：7kWp",
+    maximumPhotovoltaicInput: "最大光伏输入:7kWp",
     image: "https://menred-ess.cn/uploads/allimg/20250801/1-250P110554V01.png",
   },
   {
@@ -24,7 +24,7 @@ const products = [
     description: "单相光伏储能系统",
     ratedCapacity: "额定容量：24.56kWh",
     ratedPower: "额定功率：12kW",
-    maximumPhotovoltaicInput: "最大光伏输入：14kWp",
+    maximumPhotovoltaicInput: "最大光伏输入:14kWp",
     image:
       "https://menred-ess.cn/uploads/allimg/20250801/1-250P110554Q48.png",
   },
@@ -34,7 +34,7 @@ const products = [
     description: "单相光伏储能系统", // 名字
     ratedCapacity: "额定容量：36.86kWh", // 额定容量
     ratedPower: "额定功率：12kW", // 额定功率
-    maximumPhotovoltaicInput: "最大光伏输入：14kWp", // 最大光伏输入
+    maximumPhotovoltaicInput: "最大光伏输入:14kWp", // 最大光伏输入
     image:
       "https://menred-ess.cn/uploads/allimg/20250801/1-250P110554U23.png",
   },
@@ -44,7 +44,7 @@ const products = [
     description: "单相光伏储能系统",
     ratedCapacity: "额定容量：36.86kWh",
     ratedPower: "额定功率：18kW",
-    maximumPhotovoltaicInput: "最大光伏输入：21kWp",
+    maximumPhotovoltaicInput: "最大光伏输入:21kWp",
     image:
       "https://menred-ess.cn/uploads/allimg/20250801/1-250P1105549209.png",
   },
@@ -54,7 +54,7 @@ const products = [
     description: "三相光伏储能系统",
     ratedCapacity: "额定容量：36.86kWh",
     ratedPower: "额定功率：18kW",
-    maximumPhotovoltaicInput: "最大光伏输入：21kWp",
+    maximumPhotovoltaicInput: "最大光伏输入:21kWp",
     image:
       "https://menred-ess.cn/uploads/allimg/20250801/1-250P1105549417.png",
   },
