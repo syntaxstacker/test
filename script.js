@@ -23,7 +23,7 @@ function calculateBatteryCapacity() {
             .replace(/(\.\d{4}).*/g, '$1');
     }
     if (powerInput.value === '' || isNaN(powerInput.value)) {
-        showError('请输入有效的数字');
+        showError('请输入负载功率');
         return;
     }
     const powerKwh = parseFloat(powerInput.value);
@@ -35,7 +35,7 @@ function calculateBatteryCapacity() {
             .replace(/(\.\d{4}).*/g, '$1');
     }
     if (durationInput.value === '' || isNaN(durationInput.value)) {
-        showError('请输入有效的数字');
+        showError('请输入工作时长');
         return;
     }
     const duration = parseFloat(durationInput.value);
@@ -74,8 +74,29 @@ function calculateBatteryCapacity() {
     // Display result in kWh and Wh
     batteryCapacitySpan.textContent = `${energyKwh.toFixed(2)} kWh / ${(energyKwh*1000).toFixed(0)} Wh`;
     resultDiv.classList.remove('hidden');
+
+    if (energyKwh > 36.86) {
+        const modal = document.getElementById('contact-modal');
+        const closeBtn = document.getElementById('modal-close');
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            if (closeBtn) closeBtn.onclick = () => { modal.classList.add('hidden'); modal.classList.remove('flex'); };
+            modal.onclick = (e) => { if (e.target === modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); } };
+        }
+        // hide only the list, keep title visible
+        const list = document.getElementById('product-list');
+        if (list) list.classList.add('hidden');
+        if (recommendationsDiv) recommendationsDiv.classList.remove('hidden');
+        const panel = document.getElementById('right-panel');
+        if (panel) panel.classList.remove('hidden');
+        return;
+    }
     
     // Show product recommendations using kWh
+    const list = document.getElementById('product-list');
+    if (list) list.classList.remove('hidden');
+    if (recommendationsDiv) recommendationsDiv.classList.remove('hidden');
     showProductRecommendations(energyKwh);
 }
 
@@ -120,7 +141,7 @@ function showProductRecommendations(requiredKwh) {
                 <p class="text-gray-700">${chosen.ratedPower}</p>
                 <div class="flex justify-between items-center">
                     <p class="text-gray-700">${chosen.maximumPhotovoltaicInput}</p>
-                    <button class="bg-primary hover:bg-[#6a7a40] text-white px-3 py-1 rounded text-sm transition-colors">查看</button>
+                    <a href="${chosen.link}" class="bg-primary hover:bg-[#6a7a40] text-white px-3 py-1 rounded text-sm transition-colors" target="_self" rel="noopener">查看</a>
                 </div>
             </div>
         `;
@@ -137,6 +158,8 @@ function showError(message) {
         else el.textContent = '';
     });
     errorDiv.classList.remove('hidden');
+    if (recommendationsDiv) recommendationsDiv.classList.remove('hidden');
+    if (productListDiv) { productListDiv.innerHTML = ''; productListDiv.classList.add('hidden'); }
 }
 
 // 添加事件监听器

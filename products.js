@@ -8,6 +8,7 @@ const products = [
     ratedPower: "额定功率：6kW",
     maximumPhotovoltaicInput: "最大光伏输入：7kWp",
     image: "https://menred-ess.cn/uploads/allimg/20250801/1-250P110554K26.png",
+    link: "https://www.menred-ess.cn/chanpinzhongxin/109.html"
   },
   {
     id: 2,
@@ -17,6 +18,7 @@ const products = [
     ratedPower: "额定功率：6kW",
     maximumPhotovoltaicInput: "最大光伏输入:7kWp",
     image: "https://menred-ess.cn/uploads/allimg/20250801/1-250P110554V01.png",
+    link: "https://www.menred-ess.cn/chanpinzhongxin/123.html"
   },
   {
     id: 3,
@@ -27,6 +29,7 @@ const products = [
     maximumPhotovoltaicInput: "最大光伏输入:14kWp",
     image:
       "https://menred-ess.cn/uploads/allimg/20250801/1-250P110554Q48.png",
+    link: "https://www.menred-ess.cn/chanpinzhongxin/124.html"
   },
     {
     id: 4,
@@ -37,6 +40,7 @@ const products = [
     maximumPhotovoltaicInput: "最大光伏输入:14kWp", // 最大光伏输入
     image:
       "https://menred-ess.cn/uploads/allimg/20250801/1-250P110554U23.png",
+    link: "https://www.menred-ess.cn/chanpinzhongxin/125.html"  
   },
   {
     id: 5,
@@ -47,6 +51,7 @@ const products = [
     maximumPhotovoltaicInput: "最大光伏输入:21kWp",
     image:
       "https://menred-ess.cn/uploads/allimg/20250801/1-250P1105549209.png",
+    link: "https://www.menred-ess.cn/chanpinzhongxin/126.html"
   },
   {
     id: 6,
@@ -57,5 +62,6 @@ const products = [
     maximumPhotovoltaicInput: "最大光伏输入:21kWp",
     image:
       "https://menred-ess.cn/uploads/allimg/20250801/1-250P1105549417.png",
+    link: "https://www.menred-ess.cn/chanpinzhongxin/127.html"
   },
 ];
