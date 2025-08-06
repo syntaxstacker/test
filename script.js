@@ -81,50 +81,51 @@ function calculateBatteryCapacity() {
 
 // Show product recommendations function
 function showProductRecommendations(requiredKwh) {
-    // Clear previous product list
     productListDiv.innerHTML = '';
-    
-    // Find recommended products (smallest product with capacity >= required capacity, and a slightly larger one)
-    const recommendedProducts = products.filter(product => {
-        const productCapacity = parseFloat(product.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
-        return productCapacity >= requiredKwh;
-    }).sort((a, b) => {
-        const capacityA = parseFloat(a.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
-        const capacityB = parseFloat(b.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
-        return capacityA - capacityB;
-    }).slice(0, 2);
-    
-    // If no suitable products found, recommend the product with maximum capacity
-    if (recommendedProducts.length === 0) {
-        const maxProduct = [...products].sort((a, b) => {
-            const capacityA = parseFloat(a.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
-            const capacityB = parseFloat(b.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
-            return capacityB - capacityA;
-        })[0];
-        recommendedProducts.push(maxProduct);
+
+    const parseKwh = (s) => {
+        if (!s) return NaN;
+        let t = String(s).trim();
+        t = t.replace('额定容量：', '').replace('Rated capacity: ', '').replace(/kWh/i, '').trim();
+        t = t.replace(/[^0-9.]/g, '');
+        return parseFloat(t);
+    };
+
+    const withCap = products.map(p => ({ p, cap: parseKwh(p.ratedCapacity) })).filter(x => !isNaN(x.cap));
+    const ge = withCap.filter(x => x.cap >= requiredKwh).sort((a,b) => a.cap - b.cap);
+
+    let picks = [];
+    if (ge.length) {
+        const minCap = ge[0].cap;
+        picks = ge.filter(x => Math.abs(x.cap - minCap) < 1e-9); // include ties
+    } else {
+        const maxCap = Math.max(...withCap.map(x => x.cap));
+        picks = withCap.filter(x => x.cap === maxCap);
     }
-    
-    // Generate product recommendation HTML
-    recommendedProducts.forEach(product => {
+
+    if (!picks.length) {
+        recommendationsDiv.classList.add('hidden');
+        return;
+    }
+
+    picks.forEach(({p: chosen}) => {
         const productCard = document.createElement('div');
         productCard.className = 'border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow';
         productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.model}" class="w-full h-92 object-cover">
+            <img src="${chosen.image}" alt="${chosen.model}" class="w-full h-92 object-cover">
             <div class="p-4">
-                <h3 class="font-semibold text-lg text-gray-800">${product.model}</h3>
-                <p class="text-gray-600 mt-2">${product.description}</p>
-                <p class="text-gray-700 mt-1">${product.ratedCapacity}</p>
-                <p class="text-gray-700">${product.ratedPower}</p>
+                <h3 class="font-semibold text-lg text-gray-800">${chosen.model}</h3>
+                <p class="text-gray-600 mt-2">${chosen.description}</p>
+                <p class="text-gray-700 mt-1">${chosen.ratedCapacity}</p>
+                <p class="text-gray-700">${chosen.ratedPower}</p>
                 <div class="flex justify-between items-center">
-                    <p class="text-gray-700">${product.maximumPhotovoltaicInput}</p>
+                    <p class="text-gray-700">${chosen.maximumPhotovoltaicInput}</p>
                     <button class="bg-primary hover:bg-[#6a7a40] text-white px-3 py-1 rounded text-sm transition-colors">查看详情</button>
                 </div>
             </div>
         `;
         productListDiv.appendChild(productCard);
     });
-    
-    // Show recommendations section
     recommendationsDiv.classList.remove('hidden');
 }
 
