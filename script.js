@@ -15,20 +15,32 @@ function calculateBatteryCapacity() {
     errorDiv.classList.add('hidden');
     recommendationsDiv.classList.add('hidden');
     
-    // Get input values
-    if (isNaN(powerInput.value)) {
+    // Get input values (power in kWh)
+    if (!/^\d*(?:\.\d{0,4})?$/.test(powerInput.value)) {
+        powerInput.value = powerInput.value
+            .replace(/[^\d.]/g, '')
+            .replace(/(\..*)\./g, '$1')
+            .replace(/(\.\d{4}).*/g, '$1');
+    }
+    if (powerInput.value === '' || isNaN(powerInput.value)) {
         showError('请输入有效的数字');
         return;
     }
-    const power = parseFloat(powerInput.value);
+    const powerKwh = parseFloat(powerInput.value);
     
-    if (isNaN(durationInput.value)) {
+    if (!/^\d*(?:\.\d{0,4})?$/.test(durationInput.value)) {
+        durationInput.value = durationInput.value
+            .replace(/[^\d.]/g, '')
+            .replace(/(\..*)\./g, '$1')
+            .replace(/(\.\d{4}).*/g, '$1');
+    }
+    if (durationInput.value === '' || isNaN(durationInput.value)) {
         showError('请输入有效的数字');
         return;
     }
     const duration = parseFloat(durationInput.value);
     
-    if (power <= 0) {
+    if (powerKwh <= 0) {
         powerInput.value = '0';
         showError('负载功率必须大于0');
         return;
@@ -42,7 +54,7 @@ function calculateBatteryCapacity() {
     
     if (duration <= 0) {
         durationInput.value = '0';
-        if (power > 0) {
+        if (powerKwh > 0) {
             errorDiv.classList.add('hidden');
         } else {
             showError('请填写有效的数值');
@@ -56,29 +68,26 @@ function calculateBatteryCapacity() {
         return;
     }
     
-    // Calculate battery capacity (Wh)
-    const batteryCapacity = power * duration;
+    // Calculate energy (kWh)
+    const energyKwh = powerKwh * duration;
     
-    // Display result
-    batteryCapacitySpan.textContent = batteryCapacity.toFixed(2);
+    // Display result in kWh and Wh
+    batteryCapacitySpan.textContent = `${energyKwh.toFixed(2)} kWh / ${(energyKwh*1000).toFixed(0)} Wh`;
     resultDiv.classList.remove('hidden');
     
-    // Show product recommendations
-    showProductRecommendations(batteryCapacity);
+    // Show product recommendations using kWh
+    showProductRecommendations(energyKwh);
 }
 
 // Show product recommendations function
-function showProductRecommendations(capacity) {
+function showProductRecommendations(requiredKwh) {
     // Clear previous product list
     productListDiv.innerHTML = '';
-    
-    // Convert capacity from Wh to kWh for comparison with product data
-    const capacityKwh = capacity / 1000;
     
     // Find recommended products (smallest product with capacity >= required capacity, and a slightly larger one)
     const recommendedProducts = products.filter(product => {
         const productCapacity = parseFloat(product.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
-        return productCapacity >= capacityKwh;
+        return productCapacity >= requiredKwh;
     }).sort((a, b) => {
         const capacityA = parseFloat(a.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
         const capacityB = parseFloat(b.ratedCapacity.replace('Rated capacity: ', '').replace('kWh', ''));
