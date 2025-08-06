@@ -20,17 +20,22 @@
 <body class="bg-gray-100 min-h-screen p-4">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full" id="calculator">
-            <h1 class="text-2xl font-bold text-left text-gray-800 mb-6">电池容量计算器</h1>
+            <h1 class="text-2xl font-bold text-left text-gray-800 mb-6">光伏储能系统计算器</h1>
             <div class="space-y-4">
                 <div>
-                    <label for="power" class="block text-sm font-medium text-gray-700 mb-1">负载功率 (kw)</label>
-                    <input type="text" id="power" inputmode="decimal" step="0.01" min="0" pattern="\d*(\.\d{0,4})?" maxlength="18" onbeforeinput="if(!/^\d*(?:\.\d{0,4})?$/.test(this.value + (event.data||''))) event.preventDefault()" oninput="this.value=this.value.replace(/[^\d.]/g,'').replace(/(\..*)\./g,'$1').replace(/^(\d+)\.(\d{0,4}).*$/,'$1.$2')" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="请输入负载功率">
+                    <span class="block text-sm font-medium text-gray-700 mb-1">负载功率</span>
+                    <div id="power" class="grid grid-cols-4 gap-2">
+                        <button type="button" data-value="6" class="px-3 py-2 border rounded-md">＜6kW</button>
+                        <button type="button" data-value="12" class="px-3 py-2 border rounded-md">＜12kW</button>
+                        <button type="button" data-value="18" class="px-3 py-2 border rounded-md">＜18kW</button>
+                        <button type="button" data-value="other" class="px-3 py-2 border rounded-md">其它功率</button>
+                    </div>
                 </div>
                 <div>
                     <label for="duration" class="block text-sm font-medium text-gray-700 mb-1">工作时长 (小时)</label>
                     <input type="text" id="duration" inputmode="decimal" step="0.01" min="0" pattern="\d*(\.\d{0,4})?" maxlength="18" onbeforeinput="if(!/^\d*(?:\.\d{0,4})?$/.test(this.value + (event.data||''))) event.preventDefault()" oninput="this.value=this.value.replace(/[^\d.]/g,'').replace(/(\..*)\./g,'$1').replace(/^(\d+)\.(\d{0,4}).*$/,'$1.$2')" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="请输入工作时长">
                 </div>
-                <button id="calculate" class="w-full bg-primary hover:bg-[#6a7a40] text-white font-medium py-2 px-4 rounded-md transition duration-300">计算电池容量</button>
+                <button id="calculate" class="w-full bg-primary hover:bg-[#6a7a40] text-white font-medium py-2 px-4 rounded-md transition duration-300">计算</button>
                 <div id="result" class="hidden mt-4 p-4 bg-green-50 rounded-md">
                     <h2 class="text-lg font-semibold text-gray-800">计算结果</h2>
                     <p class="text-gray-700 mt-2">所需电池容量: <span id="battery-capacity" class="font-medium text-primary">0</span> </p>

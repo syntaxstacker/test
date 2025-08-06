@@ -1,6 +1,26 @@
 // Get DOM elements
 const powerInput = document.getElementById('power');
 const durationInput = document.getElementById('duration');
+let selectedPower = null;
+if (powerInput) {
+    powerInput.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-value]');
+        if (!btn) return;
+        selectedPower = btn.getAttribute('data-value');
+        Array.from(powerInput.querySelectorAll('button')).forEach(b => b.classList.remove('bg-primary','text-white','pointer-events-none'));
+        btn.classList.add('bg-primary','text-white','pointer-events-none');
+        if (selectedPower === 'other') {
+            const modal = document.getElementById('contact-modal');
+            const closeBtn = document.getElementById('modal-close');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                if (closeBtn) closeBtn.onclick = () => { modal.classList.add('hidden'); modal.classList.remove('flex'); };
+                modal.onclick = (e) => { if (e.target === modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); } };
+            }
+        }
+    });
+}
 const calculateBtn = document.getElementById('calculate');
 const resultDiv = document.getElementById('result');
 const errorDiv = document.getElementById('error');
@@ -15,18 +35,20 @@ function calculateBatteryCapacity() {
     errorDiv.classList.add('hidden');
     recommendationsDiv.classList.add('hidden');
     
-    // Get input values (power in kWh)
-    if (!/^\d*(?:\.\d{0,4})?$/.test(powerInput.value)) {
-        powerInput.value = powerInput.value
-            .replace(/[^\d.]/g, '')
-            .replace(/(\..*)\./g, '$1')
-            .replace(/(\.\d{4}).*/g, '$1');
-    }
-    if (powerInput.value === '' || isNaN(powerInput.value)) {
-        showError('请输入负载功率');
+    // Get input values (power from selector in kW)
+    let powerKw;
+    const powerVal = selectedPower;
+    if (powerVal === '6') powerKw = 6;
+    else if (powerVal === '12') powerKw = 12;
+    else if (powerVal === '18') powerKw = 18;
+    else if (powerVal === 'other') {
+        showError('“其它功率”暂不支持计算');
+        return;
+    } else {
+        showError('请选择负载功率');
         return;
     }
-    const powerKwh = parseFloat(powerInput.value);
+    const powerKwh = powerKw;
     
     if (!/^\d*(?:\.\d{0,4})?$/.test(durationInput.value)) {
         durationInput.value = durationInput.value
@@ -41,13 +63,6 @@ function calculateBatteryCapacity() {
     const duration = parseFloat(durationInput.value);
     
     if (powerKwh <= 0) {
-        powerInput.value = '0';
-        showError('负载功率必须大于0');
-        return;
-    }
-    
-    if (powerInput.value < 0) {
-        powerInput.value = '0';
         showError('负载功率必须大于0');
         return;
     }
@@ -93,11 +108,97 @@ function calculateBatteryCapacity() {
         return;
     }
     
-    // Show product recommendations using kWh
+    // Show product recommendations
     const list = document.getElementById('product-list');
     if (list) list.classList.remove('hidden');
     if (recommendationsDiv) recommendationsDiv.classList.remove('hidden');
-    showProductRecommendations(energyKwh);
+    if (selectedPower === '18') {
+        productListDiv.innerHTML = '';
+        [5,6].forEach(id => {
+            const chosen = products.find(p => p.id === id);
+            if (!chosen) return;
+            const productCard = document.createElement('div');
+            productCard.className = 'flex-none border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow';
+            productCard.innerHTML = `
+                <img src="${chosen.image}" alt="${chosen.model}" class="w-full h-92 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg text-gray-800">${chosen.model}</h3>
+                    <p class="text-gray-600 mt-2">${chosen.description}</p>
+                    <p class="text-gray-700 mt-1">${chosen.ratedCapacity}</p>
+                    <p class="text-gray-700">${chosen.ratedPower}</p>
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-700">${chosen.maximumPhotovoltaicInput}</p>
+                        <a href="${chosen.link}" class="bg-primary hover:bg-[#6a7a40] text-white px-3 py-1 rounded text-sm transition-colors" target="_self" rel="noopener">查看</a>
+                    </div>
+                </div>
+            `;
+            productListDiv.appendChild(productCard);
+        });
+    } else if (selectedPower === '6') {
+        const cap1 = 12.28;
+        const cap2 = 24.56;
+        if (energyKwh < cap1) {
+            renderProductsByIds([1]);
+        } else if (energyKwh > cap1 && energyKwh < cap2) {
+            renderProductsByIds([2]);
+        } else {
+            const modal = document.getElementById('contact-modal');
+            const closeBtn = document.getElementById('modal-close');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                if (closeBtn) closeBtn.onclick = () => { modal.classList.add('hidden'); modal.classList.remove('flex'); };
+                modal.onclick = (e) => { if (e.target === modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); } };
+            }
+            const listEl = document.getElementById('product-list');
+            if (listEl) listEl.classList.add('hidden');
+        }
+    } else if (selectedPower === '12') {
+        const cap2 = 24.56;
+        const cap3 = 36.86;
+        if (energyKwh < cap2) {
+            renderProductsByIds([3]);
+        } else if (energyKwh > cap2 && energyKwh < cap3) {
+            renderProductsByIds([4]);
+        } else {
+            const modal = document.getElementById('contact-modal');
+            const closeBtn = document.getElementById('modal-close');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                if (closeBtn) closeBtn.onclick = () => { modal.classList.add('hidden'); modal.classList.remove('flex'); };
+                modal.onclick = (e) => { if (e.target === modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); } };
+            }
+            const listEl = document.getElementById('product-list');
+            if (listEl) listEl.classList.add('hidden');
+        }
+    } else {
+        showProductRecommendations(energyKwh);
+    }
+}
+
+function renderProductsByIds(ids) {
+    productListDiv.innerHTML = '';
+    ids.forEach(id => {
+        const chosen = products.find(p => p.id === id);
+        if (!chosen) return;
+        const productCard = document.createElement('div');
+        productCard.className = 'flex-none border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow';
+        productCard.innerHTML = `
+            <img src="${chosen.image}" alt="${chosen.model}" class="w-full h-92 object-cover">
+            <div class="p-4">
+                <h3 class="font-semibold text-lg text-gray-800">${chosen.model}</h3>
+                <p class="text-gray-600 mt-2">${chosen.description}</p>
+                <p class="text-gray-700 mt-1">${chosen.ratedCapacity}</p>
+                <p class="text-gray-700">${chosen.ratedPower}</p>
+                <div class="flex justify-between items-center">
+                    <p class="text-gray-700">${chosen.maximumPhotovoltaicInput}</p>
+                    <a href="${chosen.link}" class="bg-primary hover:bg-[#6a7a40] text-white px-3 py-1 rounded text-sm transition-colors" target="_self" rel="noopener">查看</a>
+                </div>
+            </div>
+        `;
+        productListDiv.appendChild(productCard);
+    });
 }
 
 // Show product recommendations function
